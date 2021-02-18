@@ -45,7 +45,5 @@ namespace Seven_Bits_Practical.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<EmployeeListByFilter_Result>("EmployeeListByFilter", startDateParameter, endDateParameter, idParameter);
         }
-
-        public System.Data.Entity.DbSet<Seven_Bits_Practical.Models.EmployeeListByFilter_Result> EmployeeListByFilter_Result { get; set; }
     }
 }
