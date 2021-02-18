@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "Search";
+}
+
+@Html.ActionLink("Home", "Index")
+<div class="container">
+    <div class="form-horizontal">
+        <div class="form-group all_mn">
+            <label class="control-label col-md-1">From Date:</label>
+            <div class="col-md-3">
+                <input type="date" class="form-control" id="FromDate" name="FromDate">
+            </div>
+            <label class="control-label col-md-1">To Date:</label>
+            <div class="col-md-3">
+                <input type="date" class="form-control" id="ToDate" name="ToDate">
+            </div>
+            <div class="col-md-4">
+                @Html.DropDownList("EmpId", new SelectList(ViewBag.EmpLlist, "Id", "Name"), "Filter BY Employee Name", new { @class = "form-control" })
+            </div>
+            <div class="col-sm-1">
+                <button type="submit" class="btn btnFilter btn-info" id="btnsearch" title="Filter Record"><span class="glyphicon glyphicon-search"></span>&nbsp;Search</button>
+            </div>
+        </div>
+    </div>
+    <div id="divReport">
+    </div>
+
+</div>
+
+@Scripts.Render("~/bundles/jquery")
+<script type="text/javascript">
+    $(document).ready(function () {
+        GetData();
+
+    });
+    $("#btnsearch").click(function () {
+        var Startdate = $('#FromDate').val();
+        var Enddate = $('#ToDate').val();
+        if (Date.parse(Startdate) > Date.parse(Enddate)) {
+            //$("#divJobEarnings").empty();
+            bootbox.alert("Invalid Date Range.");
+            return false;
+        }
+        GetData();
+    });
+
+    function GetData() {
+        var Startdate = $('#FromDate').val();
+        var Enddate = $('#ToDate').val();
+        var Empid = $("#EmpId").val();
+        $.get("/Employee/EmployeeListData", { Startdate: Startdate, Enddate: Enddate, Empid: Empid }, function (data) {
+            $("#divReport").empty().append(data);
+        });
+    }
+</script>

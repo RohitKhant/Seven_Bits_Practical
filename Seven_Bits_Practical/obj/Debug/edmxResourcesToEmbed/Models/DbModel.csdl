@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Seven_BitsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="DbModel" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Employees" EntityType="Seven_BitsModel.Employee" />
+    <EntitySet Name="EmployeeSalaries" EntityType="Seven_BitsModel.EmployeeSalary" />
+    <AssociationSet Name="FK_EmployeeSalary_Employee" Association="Seven_BitsModel.FK_EmployeeSalary_Employee">
+      <End Role="Employee" EntitySet="Employees" />
+      <End Role="EmployeeSalary" EntitySet="EmployeeSalaries" />
+    </AssociationSet>
+    <FunctionImport Name="EmployeeListByFilter" ReturnType="Collection(Seven_BitsModel.EmployeeListByFilter_Result)">
+      <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+      <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+      <Parameter Name="Id" Mode="In" Type="Int32" />
+    </FunctionImport>
+  </EntityContainer>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Department" Type="Int32" Nullable="false" />
+    <Property Name="DOB" Type="DateTime" Precision="7" />
+    <NavigationProperty Name="EmployeeSalaries" Relationship="Seven_BitsModel.FK_EmployeeSalary_Employee" FromRole="Employee" ToRole="EmployeeSalary" />
+  </EntityType>
+  <EntityType Name="EmployeeSalary">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EmpId" Type="Int32" />
+    <Property Name="Salary" Type="Decimal" Precision="19" Scale="4" />
+    <NavigationProperty Name="Employee" Relationship="Seven_BitsModel.FK_EmployeeSalary_Employee" FromRole="EmployeeSalary" ToRole="Employee" />
+  </EntityType>
+  <Association Name="FK_EmployeeSalary_Employee">
+    <End Type="Seven_BitsModel.Employee" Role="Employee" Multiplicity="0..1" />
+    <End Type="Seven_BitsModel.EmployeeSalary" Role="EmployeeSalary" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="EmployeeSalary">
+        <PropertyRef Name="EmpId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <ComplexType Name="EmployeeListByFilter_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="200" />
+    <Property Type="Int32" Name="Department" Nullable="false" />
+    <Property Type="DateTime" Name="DOB" Nullable="true" />
+    <Property Type="Decimal" Name="Salary" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="avgsalary" Nullable="true" Precision="19" />
+  </ComplexType>
+</Schema>

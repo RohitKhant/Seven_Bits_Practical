@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Seven_Bits_Practical.Models.EmployeeListByFilter_Result>
+@using Seven_Bits_Practical.Models
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Department)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DOB)
+        </th>
+        <th>Average Salary</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                <span>@common.GetDescription(@Enum.GetName(typeof(common.Department), item.Department))</span>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DOB)
+            </td>
+            <td><span>@item.avgsalary</span></td>
+
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Seven_BitsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="200" />
+    <Property Name="Department" Type="int" Nullable="false" />
+    <Property Name="DOB" Type="datetime2" Precision="7" />
+  </EntityType>
+  <EntityType Name="EmployeeSalary">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EmpId" Type="int" />
+    <Property Name="Salary" Type="money" />
+  </EntityType>
+  <Association Name="FK_EmployeeSalary_Employee">
+    <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+    <End Role="EmployeeSalary" Type="Self.EmployeeSalary" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="EmployeeSalary">
+        <PropertyRef Name="EmpId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="EmployeeListByFilter" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="StartDate" Type="datetime" Mode="In" />
+    <Parameter Name="EndDate" Type="datetime" Mode="In" />
+    <Parameter Name="Id" Type="int" Mode="In" />
+  </Function>
+  <EntityContainer Name="Seven_BitsModelStoreContainer">
+    <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EmployeeSalary" EntityType="Self.EmployeeSalary" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_EmployeeSalary_Employee" Association="Self.FK_EmployeeSalary_Employee">
+      <End Role="Employee" EntitySet="Employee" />
+      <End Role="EmployeeSalary" EntitySet="EmployeeSalary" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
